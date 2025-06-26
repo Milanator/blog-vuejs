@@ -1,10 +1,9 @@
+<script lang="ts" setup>
+import Header from "~/components/layout/header.vue";
+</script>
 <template>
-  <header>
-    <nav>
-      <ul>
-        <li><NuxtLink to="/post">Posts</NuxtLink></li>
-      </ul>
-    </nav>
-  </header>
-  <NuxtPage />
+  <Header />
+  <div>
+    <NuxtPage />
+  </div>
 </template>
