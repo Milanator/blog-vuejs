@@ -1,9 +1,10 @@
 import { defineStore } from "pinia";
 import { useNuxtApp } from "#app";
+import type { User } from "~/types/UserType";
 
 export const usePostStore = defineStore("post", {
   state: () => ({
-    items: [],
+    items: [] as User[],
   }),
   actions: {
     fetchAll() {
