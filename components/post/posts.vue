@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import Crud from "~/components/button/crud.vue";
 import Image from "~/components/post/image.vue";
+import { usePost } from "~/composables/usePost.ts";
 import { usePostStore } from "~/stores/postStore.ts";
 
 const postStore = usePostStore();
+
+const { deletePost } = usePost();
 
 postStore.fetchAll();
 </script>
@@ -19,6 +22,6 @@ postStore.fetchAll();
       </p>
     </div>
     <Image :image-url="post.imageUrl" />
-    <Crud :id="post._id" type="post" />
+    <Crud :id="post._id" type="post" @delete="deletePost(post._id)" />
   </div>
 </template>

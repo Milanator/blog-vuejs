@@ -62,6 +62,18 @@ export const usePostStore = defineStore("post", {
       }
     },
 
+    deletePost(id:string): void | Promise<AxiosResponse> {
+      const { $axios } = useNuxtApp();
+
+      try {
+        return $axios.delete(`/post/${id}`);
+      } catch (error: any) {
+        console.log(error);
+
+        return;
+      }
+    },
+
     setPost(id: string): void {
       const { $axios } = useNuxtApp();
 

@@ -43,9 +43,25 @@ export function usePost() {
     }
   }
 
+  function deletePost(id: string): void {
+    if (confirm("Naozaj chceš odstrániť položku?")) {
+      const response = postStore.deletePost(id);
+
+      if (response) {
+        response.then((r: object) => {
+          appStore.setSuccessMessage(r.data.data.message);
+
+          // redirect listing
+          return navigateTo("/post");
+        });
+      }
+    }
+  }
+
   return {
     storePost,
     updatePost,
+    deletePost,
     text,
   };
 }
