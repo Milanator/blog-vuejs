@@ -8,10 +8,7 @@ import type { AxiosResponse } from "axios";
 export const usePostStore = defineStore("post", {
   state: () => ({
     items: [] as User[],
-    title: undefined,
-    text: undefined,
-    imageUrl: undefined,
-    post: undefined as Post | undefined,
+    post: {} as Post | {},
   }),
   actions: {
     fetchAll() {
@@ -27,7 +24,7 @@ export const usePostStore = defineStore("post", {
     },
 
     clearFields(): void {
-      this.title = this.text = this.imageUrl = undefined;
+      this.post = {}
     },
 
     storePost(): void | Promise<AxiosResponse> {
@@ -35,9 +32,8 @@ export const usePostStore = defineStore("post", {
 
       try {
         const formData = getFormData({
-          title: this.title,
-          text: this.text,
-          imageUrl: this.imageUrl,
+          text: this.post.text,
+          imageUrl: this.post.imageUrl,
         });
 
         return $axios.post("/post", formData, {
@@ -57,7 +53,7 @@ export const usePostStore = defineStore("post", {
 
       try {
         $axios.get(`/post/${id}`).then((r: object) => {
-          console.log(r.data);
+          this.post = r.data;
         });
       } catch (error: any) {
         console.log(error);

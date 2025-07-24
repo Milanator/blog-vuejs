@@ -6,11 +6,9 @@ import { ref } from "vue";
 const postStore = usePostStore();
 const appStore = useAppStore();
 
-const title = ref(undefined);
+const text = ref(undefined);
 
 function submit(event: Event): void {
-  console.log("enter");
-
   event.preventDefault();
 
   const response = postStore.storePost();
@@ -22,7 +20,7 @@ function submit(event: Event): void {
 
         postStore.clearFields();
 
-        title.value.focus();
+        text.value.focus();
       })
       .then(() => {
         postStore.fetchAll();
@@ -32,23 +30,17 @@ function submit(event: Event): void {
 </script>
 <template>
   <div
-    class="p-4 bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700"
+    class="mb-4 p-4 bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700"
   >
-    <input
+    <textarea
+      ref="text"
       autofocus
       type="text"
-      class="block p-3.5 w-full text-sm text-gray-900 bg-gray-50 rounded-2xl border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
-      placeholder="Your post title..."
-      ref="title"
-      v-model="postStore.title"
-      @keyup.enter="submit"
-    />
-    <textarea
       id="text"
       rows="4"
       class="block p-3.5 w-full text-sm text-gray-900 bg-gray-50 rounded-2xl border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
       placeholder="Your post text..."
-      v-model="postStore.text"
+      v-model="postStore.post.text"
       @keyup.enter="submit"
     ></textarea>
 
@@ -85,9 +77,19 @@ function submit(event: Event): void {
           id="dropzone-file"
           type="file"
           class="hidden"
-          @change="postStore.imageUrl = $event.target.files[0]"
+          @change="postStore.post.imageUrl = $event.target.files[0]"
         />
       </label>
+    </div>
+
+    <div class="text-right">
+      <button
+        type="button"
+        class="mt-2 uppercase cursor-pointer text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-2xl text-xs px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+        @keyup.enter="submit"
+      >
+        Publish
+      </button>
     </div>
   </div>
 </template>
