@@ -1,6 +1,8 @@
 import { defineStore } from "pinia";
 import { useNuxtApp } from "#app";
+import { getFormData } from "~/utils/form.ts";
 import type { User } from "~/types/UserType";
+import type { Post } from "~/types/PostType";
 import type { AxiosResponse } from "axios";
 
 export const usePostStore = defineStore("post", {
@@ -8,6 +10,8 @@ export const usePostStore = defineStore("post", {
     items: [] as User[],
     title: undefined,
     text: undefined,
+    imageUrl: undefined,
+    post: undefined as Post | undefined,
   }),
   actions: {
     fetchAll() {
@@ -23,16 +27,37 @@ export const usePostStore = defineStore("post", {
     },
 
     clearFields(): void {
-      this.title = this.text = undefined;
+      this.title = this.text = this.imageUrl = undefined;
     },
 
     storePost(): void | Promise<AxiosResponse> {
       const { $axios } = useNuxtApp();
 
       try {
-        return $axios.post("/post", {
+        const formData = getFormData({
           title: this.title,
           text: this.text,
+          imageUrl: this.imageUrl,
+        });
+
+        return $axios.post("/post", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } catch (error: any) {
+        console.log(error);
+
+        return;
+      }
+    },
+
+    setPost(id: string): void {
+      const { $axios } = useNuxtApp();
+
+      try {
+        $axios.get(`/post/${id}`).then((r: object) => {
+          console.log(r.data);
         });
       } catch (error: any) {
         console.log(error);

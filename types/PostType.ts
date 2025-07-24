@@ -5,4 +5,5 @@ export type Post = {
   title: string;
   text: string;
   userId: User;
+  imageUrl: string;
 };

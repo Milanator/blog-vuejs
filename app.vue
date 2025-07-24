@@ -4,7 +4,7 @@ import FlashMessage from "~/components/flash-message.vue";
 </script>
 <template>
   <Header />
-  <div>
+  <div class="bg-slate-50 py-2">
     <NuxtPage />
   </div>
 
