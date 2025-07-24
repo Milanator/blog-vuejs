@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Crud from "~/components/button/crud.vue";
+import Image from "~/components/post/image.vue";
 import { usePostStore } from "~/stores/postStore.ts";
 
 const postStore = usePostStore();
@@ -17,10 +18,7 @@ postStore.fetchAll();
         {{ post.text }}
       </p>
     </div>
-    <img :src="post.imageUrl" :alt="post.title" />
-    <div class="p-4 dark:bg-gray-800">
-      <span class="text-xs text-gray-500">Author: {{ post.userId.email }}</span>
-      <Crud :id="post._id" type="post" />
-    </div>
+    <Image :image-url="post.imageUrl" />
+    <Crud :id="post._id" type="post" />
   </div>
 </template>

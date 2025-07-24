@@ -24,7 +24,7 @@ export const usePostStore = defineStore("post", {
     },
 
     clearFields(): void {
-      this.post = {}
+      this.post = {};
     },
 
     storePost(): void | Promise<AxiosResponse> {
@@ -48,12 +48,26 @@ export const usePostStore = defineStore("post", {
       }
     },
 
+    updatePost(): void | Promise<AxiosResponse> {
+      const { $axios } = useNuxtApp();
+
+      try {
+        return $axios.put(`/post/${this.post._id}`, {
+          text: this.post.text,
+        });
+      } catch (error: any) {
+        console.log(error);
+
+        return;
+      }
+    },
+
     setPost(id: string): void {
       const { $axios } = useNuxtApp();
 
       try {
         $axios.get(`/post/${id}`).then((r: object) => {
-          this.post = r.data;
+          this.post = r.data.data;
         });
       } catch (error: any) {
         console.log(error);
