@@ -15,11 +15,11 @@ const totalPages = ref(1);
 const loading = ref(false);
 
 onMounted(() => {
-  window.addEventListener("scroll", handleScroll);
+  window.addEventListener("scroll", onScroll);
 });
 
 onUnmounted(() => {
-  window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("scroll", onScroll);
 });
 
 const loadNewPage = (element: HTMLElement) =>
@@ -27,7 +27,7 @@ const loadNewPage = (element: HTMLElement) =>
   page.value <= totalPages.value &&
   element.getBoundingClientRect().bottom <= window.innerHeight;
 
-const handleScroll = () => {
+const onScroll = () => {
   const element: HTMLElement = container.value;
 
   if (loadNewPage(element)) {
