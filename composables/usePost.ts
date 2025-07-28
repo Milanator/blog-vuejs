@@ -58,10 +58,19 @@ export function usePost() {
     }
   }
 
+  function loadPosts(page: number = 1) {
+    return postStore.fetchPosts(page).then((response: object) => {
+      postStore.mergePosts(response.data.data.items);
+
+      return response;
+    });
+  }
+
   return {
     storePost,
     updatePost,
     deletePost,
+    loadPosts,
     text,
   };
 }

@@ -1,25 +1,31 @@
 import { defineStore } from "pinia";
 import { useNuxtApp } from "#app";
 import { getFormData } from "~/utils/form.ts";
-import type { User } from "~/types/UserType";
 import type { Post } from "~/types/PostType";
 import type { AxiosResponse } from "axios";
 
 export const usePostStore = defineStore("post", {
   state: () => ({
-    items: [] as User[],
+    items: [] as Array<object>,
     post: {} as Post | {},
   }),
   actions: {
-    fetchAll() {
+    mergePosts(newPosts: Array<object>) {
+      this.items.push(...newPosts);
+    },
+
+    fetchPosts(
+      page: number = 1,
+      perPage: number = 1
+    ): void | Promise<AxiosResponse> {
       const { $axios } = useNuxtApp();
 
       try {
-        $axios.get("/post").then((response: object) => {
-          this.items = response.data.data.items;
-        });
+        return $axios.get(`/post?page=${page}&perPage=${perPage}`);
       } catch (error: any) {
         console.log(error);
+
+        return;
       }
     },
 
@@ -62,7 +68,7 @@ export const usePostStore = defineStore("post", {
       }
     },
 
-    deletePost(id:string): void | Promise<AxiosResponse> {
+    deletePost(id: string): void | Promise<AxiosResponse> {
       const { $axios } = useNuxtApp();
 
       try {

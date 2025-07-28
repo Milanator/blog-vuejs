@@ -7,8 +7,6 @@ import { usePostStore } from "~/stores/postStore.ts";
 const postStore = usePostStore();
 
 const { deletePost } = usePost();
-
-postStore.fetchAll();
 </script>
 <template>
   <div
