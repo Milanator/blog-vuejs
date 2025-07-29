@@ -10,7 +10,7 @@ export function useUser() {
     authStore.login().then((response: object) => {
       // store localstorage
       setItem("token", response.data.data.token);
-      setItem("user", (response.data.data.user));
+      setItem("user", response.data.data.user);
 
       appStore.setSuccessMessage(response.data.data.message);
 
@@ -21,6 +21,8 @@ export function useUser() {
   const logout = () => {
     clearItem("token");
     clearItem("user");
+
+    appStore.setUser(undefined);
 
     navigateTo("/auth/login");
   };

@@ -6,6 +6,9 @@ import InfiniteScrollContainer from "~/components/infinite-scroll-container.vue"
 import Subtitle from "~/components/subtitle.vue";
 import { usePost } from "~/composables/usePost.ts";
 
+// authenticated
+definePageMeta({ middleware: "auth" });
+
 const postStore = usePostStore();
 
 const { storePost, loadPosts } = usePost();

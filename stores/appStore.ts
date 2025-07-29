@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import { Type, type FlashMessage } from "~/types/FlashMessageType";
 import { type User } from "~/types/UserType";
-import { getItem } from "~/utils/localstorage.ts";
 
 export const useAppStore = defineStore("app", {
   state: () => ({
@@ -9,7 +8,7 @@ export const useAppStore = defineStore("app", {
     user: undefined as User | undefined,
   }),
   actions: {
-    setUser(user: User): void {
+    setUser(user: User | undefined): void {
       this.user = user;
     },
 

@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { useUser } from "~/composables/useUser.ts";
+import { useAppStore } from "~/stores/appStore.ts";
+
+const appStore = useAppStore();
 
 const { logout } = useUser();
 </script>
 <template>
   <nav class="bg-white border-b border-gray-300 dark:bg-gray-900">
     <div
-      class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4"
+      class="max-w-screen-xl flex flex-wrap items-center justify-end mx-auto p-4"
     >
       <div></div>
       <div
@@ -99,12 +102,22 @@ const { logout } = useUser();
         <ul
           class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-2xl bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700"
         >
-          <li>
-            <NuxtLink to="/post">Posts</NuxtLink>
-          </li>
-          <li>
-            <NuxtLink @click="logout">Logout</NuxtLink>
-          </li>
+          <template v-if="appStore.user">
+            <li>
+              <NuxtLink to="/post">Posts</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink @click="logout">Logout</NuxtLink>
+            </li>
+          </template>
+          <template v-else>
+            <li>
+              <NuxtLink to="/auth/login">Login</NuxtLink>
+            </li>
+            <li>
+              <NuxtLink to="/auth/signup">Register</NuxtLink>
+            </li>
+          </template>
         </ul>
       </div>
     </div>
