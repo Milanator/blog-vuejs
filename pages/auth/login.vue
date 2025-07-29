@@ -3,20 +3,11 @@ import Input from "~/components/form/input.vue";
 import Subtitle from "~/components/subtitle.vue";
 import Primary from "~/components/button/primary.vue";
 import { useAuthStore } from "~/stores/authStore.ts";
-import { useAppStore } from "../../stores/appStore";
+import { useUser } from "~/composables/useUser.ts";
 
 const authStore = useAuthStore();
-const appStore = useAppStore();
 
-const login = (event: Event) => {
-  authStore.login().then((response) => {
-    console.log(response);
-
-    appStore.setSuccessMessage(response.data.data.message);
-
-    navigateTo("/post");
-  });
-};
+const { login } = useUser();
 </script>
 <template>
   <div class="max-w-2xl mx-auto my-4">
