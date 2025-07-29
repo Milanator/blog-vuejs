@@ -8,17 +8,19 @@ import { useAppStore } from "../../stores/appStore";
 const authStore = useAuthStore();
 const appStore = useAppStore();
 
-const signUp = (event: Event) => {
-  authStore.signUp().then((response) => {
+const login = (event: Event) => {
+  authStore.login().then((response) => {
+    console.log(response);
+
     appStore.setSuccessMessage(response.data.data.message);
 
-    navigateTo("/auth/login");
+    navigateTo("/post");
   });
 };
 </script>
 <template>
   <div class="max-w-2xl mx-auto my-4">
-    <Subtitle text="Sign up" />
+    <Subtitle text="Login" />
     <div
       class="w-full bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700"
     >
@@ -32,14 +34,6 @@ const signUp = (event: Event) => {
           />
         </div>
 
-        <div class="mb-2">
-          <Input
-            @change="authStore.name = $event"
-            id="name"
-            placeholder="Name"
-          />
-        </div>
-
         <Input
           @change="authStore.password = $event"
           id="password"
@@ -48,7 +42,7 @@ const signUp = (event: Event) => {
         />
 
         <div class="text-right">
-          <Primary text="Register" @click="signUp" />
+          <Primary text="Login" @click="login" />
         </div>
       </div>
     </div>
