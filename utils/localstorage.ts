@@ -1,7 +1,7 @@
-export function getItem<T>(key: string): T[] {
+export function getItem<T>(key: string): T | undefined {
   const raw = localStorage.getItem(key);
 
-  return raw ? (JSON.parse(raw) as T[]) : [];
+  return raw ? JSON.parse(raw) : undefined;
 }
 
 export function setItem<T>(key: string, data: T): void {

@@ -8,23 +8,21 @@ export function usePost() {
 
   const text = ref(undefined);
 
-  function storePost(event: Event): void {
+  async function storePost(event: Event): void {
     event.preventDefault();
 
-    const response = postStore.storePost();
+    const response = await postStore.storePost();
 
     if (response) {
-      response
-        .then((r: object) => {
-          appStore.setSuccessMessage(r.data.data.message);
+      appStore.setSuccessMessage(response.data.data.message);
 
-          postStore.clearFields();
+      postStore.items.unshift(response.data.data.item);
 
-          text.value.focus();
-        })
-        .then(() => {
-          postStore.fetchAll();
-        });
+      postStore.clearFields();
+
+      await loadPosts();
+
+      // text.value.focus();
     }
   }
 

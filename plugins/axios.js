@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getItem } from "~/utils/localstorage.ts";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const instance = axios.create({
@@ -9,6 +10,15 @@ export default defineNuxtPlugin((nuxtApp) => {
         "X-Requested-With": "XMLHttpRequest",
       },
     },
+  });
+
+  // request interceptor
+  instance.interceptors.request.use(function (config) {
+    const token = getItem("token");
+
+    config.headers.Authorization = `Bearer ${token}`;
+
+    return config;
   });
 
   return {
