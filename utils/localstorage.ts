@@ -12,6 +12,6 @@ export function deleteItem(key: string): void {
   localStorage.clearItem(key);
 }
 
-export function clearItems(key: string): void {
+export function clearItem(key: string): void {
   localStorage.removeItem(key);
 }

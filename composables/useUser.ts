@@ -1,6 +1,6 @@
 import { useAuthStore } from "~/stores/authStore.ts";
 import { useAppStore } from "~/stores/appStore";
-import { setItem } from "~/utils/localstorage.ts";
+import { setItem, clearItem } from "~/utils/localstorage.ts";
 
 export function useUser() {
   const authStore = useAuthStore();
@@ -10,7 +10,7 @@ export function useUser() {
     authStore.login().then((response: object) => {
       // store localstorage
       setItem("token", response.data.data.token);
-      setItem("userId", response.data.data.userId);
+      setItem("user", (response.data.data.user));
 
       appStore.setSuccessMessage(response.data.data.message);
 
@@ -18,7 +18,15 @@ export function useUser() {
     });
   };
 
+  const logout = () => {
+    clearItem("token");
+    clearItem("user");
+
+    navigateTo("/auth/login");
+  };
+
   return {
     login,
+    logout,
   };
 }

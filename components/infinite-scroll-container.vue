@@ -24,7 +24,7 @@ onUnmounted(() => {
 
 const loadNewPage = (element: HTMLElement) =>
   !loading.value &&
-  page.value <= totalPages.value &&
+  page.value < totalPages.value &&
   element.getBoundingClientRect().bottom <= window.innerHeight;
 
 const onScroll = () => {

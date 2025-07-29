@@ -20,24 +20,20 @@ export function usePost() {
 
       postStore.clearFields();
 
-      await loadPosts();
-
       // text.value.focus();
     }
   }
 
-  function updatePost(event: Event): void {
+  async function updatePost(event: Event): void {
     event.preventDefault();
 
-    const response = postStore.updatePost();
+    const response = await postStore.updatePost();
 
     if (response) {
-      response.then((r: object) => {
-        appStore.setSuccessMessage(r.data.data.message);
+      appStore.setSuccessMessage(response.data.data.message);
 
-        // redirect listing
-        return navigateTo("/post");
-      });
+      // redirect listing
+      navigateTo("/post");
     }
   }
 
@@ -59,6 +55,8 @@ export function usePost() {
   function loadPosts(page: number = 1) {
     return postStore.fetchPosts(page).then((response: object) => {
       postStore.mergePosts(response.data.data.items);
+
+      postStore.loading = false
 
       return response;
     });

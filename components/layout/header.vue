@@ -1,3 +1,8 @@
+<script setup lang="ts">
+import { useUser } from "~/composables/useUser.ts";
+
+const { logout } = useUser();
+</script>
 <template>
   <nav class="bg-white border-b border-gray-300 dark:bg-gray-900">
     <div
@@ -96,6 +101,9 @@
         >
           <li>
             <NuxtLink to="/post">Posts</NuxtLink>
+          </li>
+          <li>
+            <NuxtLink @click="logout">Logout</NuxtLink>
           </li>
         </ul>
       </div>
