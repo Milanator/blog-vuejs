@@ -14,7 +14,10 @@ const { storePost, loadPosts, deletePost, initActions } = usePost();
 
 postStore.clearFields();
 
-loadPosts();
+loadPosts().then(() => {
+  // loader
+  postStore.loading = false;
+});
 
 initActions();
 </script>
@@ -29,6 +32,7 @@ initActions();
     <div
       v-if="!postStore.loading"
       v-for="post in postStore.items"
+      :key="post._id"
       class="w-full bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700 mb-4"
     >
       <div class="p-4 dark:bg-gray-800">

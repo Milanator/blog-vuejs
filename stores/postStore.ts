@@ -8,11 +8,11 @@ export const usePostStore = defineStore("post", {
   state: () => ({
     items: [] as Array<object>,
     post: {} as Post | {},
-    loading: false,
+    loading: true,
   }),
   actions: {
     mergePosts(newPosts: Array<object>) {
-      this.items.push(...newPosts);
+      this.items = [...this.items, ...newPosts];
     },
 
     fetchPosts(
@@ -22,8 +22,6 @@ export const usePostStore = defineStore("post", {
       const { $axios } = useNuxtApp();
 
       try {
-        this.loading = true;
-
         return $axios.get(`/post?page=${page}&perPage=${perPage}`);
       } catch (error: any) {
         console.log(error);

@@ -1,4 +1,5 @@
 import openSocket from "socket.io-client";
+import { useInfiniteScrollStore } from "~/stores/infiniteScrollStore.ts";
 import { usePostStore } from "~/stores/postStore.ts";
 import { useAppStore } from "~/stores/appStore.ts";
 import { ref } from "vue";
@@ -6,6 +7,7 @@ import { ref } from "vue";
 export function usePost() {
   const postStore = usePostStore();
   const appStore = useAppStore();
+  const infiniteScrollStore = useInfiniteScrollStore();
 
   const text = ref(undefined);
 
@@ -52,10 +54,16 @@ export function usePost() {
   }
 
   function loadPosts(page: number = 1) {
-    return postStore.fetchPosts(page).then((response: object) => {
-      postStore.mergePosts(response.data.data.items);
+    infiniteScrollStore.loading = true;
 
-      postStore.loading = false;
+    return postStore.fetchPosts(page).then((response: object) => {
+      infiniteScrollStore.page = response.data.data.page;
+      infiniteScrollStore.totalPages = response.data.data.totalPages;
+
+      postStore.mergePosts(response.data.data.items);
+      
+      // stop loading new pages
+      infiniteScrollStore.loading = false;
 
       return response;
     });

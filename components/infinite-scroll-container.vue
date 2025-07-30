@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
+import { useInfiniteScrollStore } from "~/stores/infiniteScrollStore.ts";
 
 const props = defineProps({
   loadMore: {
@@ -7,10 +8,9 @@ const props = defineProps({
   },
 });
 
+const infiniteScrollStore = useInfiniteScrollStore();
+
 const container = ref(null);
-const page = ref(1);
-const totalPages = ref(1);
-const loading = ref(false);
 
 onMounted(() => {
   window.addEventListener("scroll", onScroll);
@@ -20,24 +20,25 @@ onUnmounted(() => {
   window.removeEventListener("scroll", onScroll);
 });
 
-const loadNewPage = (element: HTMLElement) =>
-  !loading.value &&
-  page.value < totalPages.value &&
+const canLoadMore = (element: HTMLElement) =>
+  !infiniteScrollStore.loading &&
   element.getBoundingClientRect().bottom <= window.innerHeight;
 
 const onScroll = () => {
   const element: HTMLElement = container.value;
 
-  if (loadNewPage(element)) {
-    loading.value = true;
+  if (canLoadMore(element)) {
+    if (infiniteScrollStore.page >= infiniteScrollStore.totalPages) {
+      console.log('no more items')
 
-    page.value++;
+      return ;
+    }
 
-    props.loadMore(page.value).then((response: object) => {
-      totalPages.value = response.data.data.totalPages;
+    infiniteScrollStore.loading = true;
 
-      loading.value = false;
-    });
+    infiniteScrollStore.page++;
+
+    props.loadMore(infiniteScrollStore.page);
   }
 };
 </script>
