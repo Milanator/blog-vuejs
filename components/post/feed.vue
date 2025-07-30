@@ -7,7 +7,9 @@ import Crud from "~/components/button/crud.vue";
 import Image from "~/components/post/image.vue";
 import Loader from "~/components/loader.vue";
 import InfiniteScrollContainer from "~/components/infinite-scroll-container.vue";
+import { useAppStore } from "~/stores/appStore.ts";
 
+const appStore = useAppStore();
 const postStore = usePostStore();
 
 const { storePost, loadPosts, deletePost, initActions } = usePost();
@@ -33,7 +35,7 @@ initActions();
       v-if="!postStore.loading"
       v-for="post in postStore.items"
       :key="post._id"
-      class="w-full bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700 mb-4"
+      class="w-full bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700 mb-4 overflow-hidden"
     >
       <div class="p-4 dark:bg-gray-800">
         <div class="flex mb-3">
@@ -49,7 +51,12 @@ initActions();
         </p>
       </div>
       <Image :image-url="post.imageUrl" />
-      <Crud :id="post._id" type="post" @delete="deletePost(post._id)" />
+      <Crud
+        v-if="appStore.user._id === post.userId._id"
+        :id="post._id"
+        type="post"
+        @delete="deletePost(post._id)"
+      />
     </div>
     <Loader v-else />
   </InfiniteScrollContainer>

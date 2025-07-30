@@ -61,7 +61,7 @@ export function usePost() {
       infiniteScrollStore.totalPages = response.data.data.totalPages;
 
       postStore.mergePosts(response.data.data.items);
-      
+
       // stop loading new pages
       infiniteScrollStore.loading = false;
 
@@ -81,7 +81,10 @@ export function usePost() {
       postStore.items.unshift(payload.model);
     });
 
+    // updated post
     websocket.on("updated-post", (payload) => {
+      console.log(payload);
+
       // update post in list
       postStore.items.forEach((item, i) => {
         if (payload.model._id === item._id) {
@@ -91,6 +94,19 @@ export function usePost() {
           appStore.setSuccessMessage("Updated realtime post!");
         }
       });
+    });
+
+    // deleted post
+    websocket.on("deleted-post", (payload) => {
+      console.log(payload);
+
+      // update post in list
+      postStore.items = postStore.items.filter(
+        (item) => item._id !== payload.modelId
+      );
+
+      // show if affected list
+      appStore.setSuccessMessage("Updated realtime post!");
     });
   }
 
