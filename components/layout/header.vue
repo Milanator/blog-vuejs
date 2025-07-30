@@ -104,7 +104,10 @@ const { logout } = useUser();
         >
           <template v-if="appStore.user">
             <li>
-              <NuxtLink to="/post">Posts</NuxtLink>
+              <NuxtLink to="/post">Feed</NuxtLink>
+            </li>
+               <li>
+              <NuxtLink to="/profile">Profile</NuxtLink>
             </li>
             <li>
               <NuxtLink @click="logout">Logout</NuxtLink>

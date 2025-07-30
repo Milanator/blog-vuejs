@@ -15,10 +15,11 @@ const { login } = useUser();
     <div
       class="w-full bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="p-4">
+      <form class="p-4" @submit="login">
         <div class="mb-2">
           <Input
             @change="authStore.email = $event"
+            @enter="login"
             type="email"
             id="email"
             placeholder="Email"
@@ -27,6 +28,7 @@ const { login } = useUser();
 
         <Input
           @change="authStore.password = $event"
+          @enter="login"
           id="password"
           type="password"
           placeholder="Password"
@@ -35,7 +37,7 @@ const { login } = useUser();
         <div class="text-right">
           <Primary text="Login" @click="login" />
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>

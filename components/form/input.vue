@@ -15,7 +15,7 @@ const props = defineProps({
   },
 });
 
-const emit = defineEmits(["change"]);
+const emit = defineEmits(["change", "enter"]);
 
 const inputValue = ref(props.value);
 </script>
@@ -27,5 +27,6 @@ const inputValue = ref(props.value);
     :placeholder="placeholder"
     :value="inputValue"
     @input="$emit('change', $event.target.value)"
+    @keyup.enter="$emit('enter', $event)"
   />
 </template>

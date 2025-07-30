@@ -4,6 +4,9 @@ import { usePost } from "~/composables/usePost.ts";
 import MessageField from "~/components/post/message-field.vue";
 import Subtitle from "~/components/subtitle.vue";
 
+// authenticated
+definePageMeta({ middleware: "auth" });
+
 const route = useRoute();
 
 const postStore = usePostStore();

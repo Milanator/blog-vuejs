@@ -1,6 +1,11 @@
 <script setup lang="ts">
-import Index from "~/pages/post/index.vue";
+import Feed from "~/components/post/feed.vue";
+
+// authenticated
+definePageMeta({ middleware: "auth" });
 </script>
 <template>
-  <Index/>
+  <div class="max-w-2xl mx-auto my-4">
+    <Feed />
+  </div>
 </template>
