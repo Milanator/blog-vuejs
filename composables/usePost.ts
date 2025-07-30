@@ -64,12 +64,25 @@ export function usePost() {
   function initActions() {
     const websocket = openSocket(import.meta.env.VITE_BACKEND_URL);
 
+    // created post
     websocket.on("created-post", (payload) => {
       console.log(payload);
 
       appStore.setSuccessMessage("New realtime post!");
 
       postStore.items.unshift(payload.model);
+    });
+
+    websocket.on("updated-post", (payload) => {
+      // update post in list
+      postStore.items.forEach((item, i) => {
+        if (payload.model._id === item._id) {
+          postStore.items[i] = payload.model;
+
+          // show if affected list
+          appStore.setSuccessMessage("Updated realtime post!");
+        }
+      });
     });
   }
 

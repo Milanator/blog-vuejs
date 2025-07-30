@@ -1,5 +1,7 @@
 import axios from "axios";
+import { UNAUTHORIZED_STATUS } from "~/constants.ts";
 import { getItem } from "~/utils/localstorage.ts";
+import { useUser } from "~/composables/useUser.ts";
 
 export default defineNuxtPlugin((nuxtApp) => {
   const instance = axios.create({
@@ -13,13 +15,27 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
 
   // request interceptor
-  instance.interceptors.request.use(function (config) {
+  instance.interceptors.request.use((config) => {
     const token = getItem("token");
 
     config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   });
+
+  // response interceptor
+  instance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response.status === UNAUTHORIZED_STATUS) {
+        const { logout } = useUser();
+
+        logout();
+      }
+
+      return Promise.reject(error);
+    }
+  );
 
   return {
     provide: { axios: instance },
