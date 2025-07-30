@@ -1,4 +1,3 @@
-import openSocket from "socket.io-client";
 import { useInfiniteScrollStore } from "~/stores/infiniteScrollStore.ts";
 import { usePostStore } from "~/stores/postStore.ts";
 import { useAppStore } from "~/stores/appStore.ts";
@@ -70,44 +69,6 @@ export function usePost() {
   }
 
   function initActions() {
-    const websocket = openSocket(import.meta.env.VITE_BACKEND_URL);
-
-    // created post
-    websocket.on("created-post", (payload) => {
-      console.log(payload);
-
-      appStore.setSuccessMessage("New realtime post!");
-
-      postStore.items.unshift(payload.model);
-    });
-
-    // updated post
-    websocket.on("updated-post", (payload) => {
-      console.log(payload);
-
-      // update post in list
-      postStore.items.forEach((item, i) => {
-        if (payload.model._id === item._id) {
-          postStore.items[i] = payload.model;
-
-          // show if affected list
-          appStore.setSuccessMessage("Updated realtime post!");
-        }
-      });
-    });
-
-    // deleted post
-    websocket.on("deleted-post", (payload) => {
-      console.log(payload);
-
-      // update post in list
-      postStore.items = postStore.items.filter(
-        (item) => item._id !== payload.modelId
-      );
-
-      // show if affected list
-      appStore.setSuccessMessage("Updated realtime post!");
-    });
   }
 
   return {
