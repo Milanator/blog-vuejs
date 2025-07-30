@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { ref, defineEmits } from "vue";
+import { ref } from "vue";
 
 const props = defineProps({
   loadMore: {
     type: Function,
   },
 });
-
-const emit = defineEmits(["loadMore"]);
 
 const container = ref(null);
 const page = ref(1);

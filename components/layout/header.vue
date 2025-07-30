@@ -106,7 +106,7 @@ const { logout } = useUser();
             <li>
               <NuxtLink to="/post">Feed</NuxtLink>
             </li>
-               <li>
+            <li>
               <NuxtLink to="/profile">Profile</NuxtLink>
             </li>
             <li>

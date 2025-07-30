@@ -56,7 +56,7 @@ export function usePost() {
     return postStore.fetchPosts(page).then((response: object) => {
       postStore.mergePosts(response.data.data.items);
 
-      postStore.loading = false
+      postStore.loading = false;
 
       return response;
     });
