@@ -4,7 +4,7 @@ import { getItem } from "~/utils/localstorage.ts";
 export default defineNuxtPlugin((nuxtApp) => {
   const instance = axios.create({
     withCredentials: true,
-    baseURL: import.meta.env.VITE_API_URL,
+    baseURL: import.meta.env.VITE_BACKEND_URL + "/api/v1",
     headers: {
       common: {
         "X-Requested-With": "XMLHttpRequest",

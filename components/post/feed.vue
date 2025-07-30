@@ -8,19 +8,15 @@ import Image from "~/components/post/image.vue";
 import Loader from "~/components/loader.vue";
 import InfiniteScrollContainer from "~/components/infinite-scroll-container.vue";
 
-const props = defineProps({
-  userId: {
-    type: [Number, undefined],
-  },
-});
-
 const postStore = usePostStore();
 
-const { storePost, loadPosts, deletePost } = usePost();
+const { storePost, loadPosts, deletePost, initActions } = usePost();
 
 postStore.clearFields();
 
 loadPosts();
+
+initActions();
 </script>
 <template>
   <Subtitle text="New post" />
@@ -36,6 +32,14 @@ loadPosts();
       class="w-full bg-white border border-gray-200 rounded-2xl shadow dark:bg-gray-800 dark:border-gray-700 mb-4"
     >
       <div class="p-4 dark:bg-gray-800">
+        <div class="flex mb-3">
+          <div class="mr-3 rounded-full overflow-hidden border border-gray-200">
+            <img src="https://placehold.co/40x40" alt="" />
+          </div>
+          <p>
+            <strong class="font-medium">{{ post.userId.name }}</strong>
+          </p>
+        </div>
         <p class="dark:text-gray-400">
           {{ post.text }}
         </p>

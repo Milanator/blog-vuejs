@@ -1,3 +1,4 @@
+import openSocket from "socket.io-client";
 import { usePostStore } from "~/stores/postStore.ts";
 import { useAppStore } from "~/stores/appStore.ts";
 import { ref } from "vue";
@@ -15,8 +16,6 @@ export function usePost() {
 
     if (response) {
       appStore.setSuccessMessage(response.data.data.message);
-
-      postStore.items.unshift(response.data.data.item);
 
       postStore.clearFields();
 
@@ -62,11 +61,24 @@ export function usePost() {
     });
   }
 
+  function initActions() {
+    const websocket = openSocket(import.meta.env.VITE_BACKEND_URL);
+
+    websocket.on("created-post", (payload) => {
+      console.log(payload);
+
+      appStore.setSuccessMessage("New realtime post!");
+
+      postStore.items.unshift(payload.model);
+    });
+  }
+
   return {
     storePost,
     updatePost,
     deletePost,
     loadPosts,
+    initActions,
     text,
   };
 }
