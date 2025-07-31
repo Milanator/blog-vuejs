@@ -28,6 +28,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   instance.interceptors.response.use(
     (response) => response,
     (error) => {
+      console.log(error);
+
       if (error.response.status === UNAUTHORIZED_STATUS) {
         const { logout } = useUser();
 

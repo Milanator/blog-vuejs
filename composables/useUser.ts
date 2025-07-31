@@ -9,10 +9,10 @@ export function useUser() {
   const login = () => {
     authStore.login().then((response: object) => {
       // store localstorage
-      setItem("token", response.data.data.token);
-      setItem("user", response.data.data.user);
+      setItem("token", response.data.data.login.token);
+      setItem("user", response.data.data.login.user);
 
-      appStore.setSuccessMessage(response.data.data.message);
+      appStore.setSuccessMessage(response.data.data.login.message);
 
       navigateTo("/post");
     });
