@@ -12,11 +12,23 @@ export const useAuthStore = defineStore("auth", {
       try {
         const { $axios } = useNuxtApp();
 
-        return $axios.put("/user/signup", {
-          name: this.name,
-          email: this.email,
-          password: this.password,
-        });
+        const graphqlQuery = {
+          query: `
+            mutation {
+              createUser(userInput: {
+                name: "${this.name}",
+                email: "${this.email}",
+                password: "${this.password}"
+              }) {
+                _id
+                name
+                email
+              }
+            }
+          `,
+        };
+
+        return $axios.post("", JSON.stringify(graphqlQuery));
       } catch (error: any) {
         console.log(error);
 
@@ -27,7 +39,7 @@ export const useAuthStore = defineStore("auth", {
     login(): void | Promise<AxiosResponse> {
       try {
         const { $axios } = useNuxtApp();
-        
+
         return $axios.post("/user/login", {
           email: this.email,
           password: this.password,

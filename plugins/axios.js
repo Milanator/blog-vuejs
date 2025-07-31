@@ -6,7 +6,7 @@ import { useUser } from "~/composables/useUser.ts";
 export default defineNuxtPlugin((nuxtApp) => {
   const instance = axios.create({
     withCredentials: true,
-    baseURL: import.meta.env.VITE_BACKEND_URL + "/api/v1",
+    baseURL: import.meta.env.VITE_BACKEND_URL + "/graphql",
     headers: {
       common: {
         "X-Requested-With": "XMLHttpRequest",
@@ -18,7 +18,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   instance.interceptors.request.use((config) => {
     const token = getItem("token");
 
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers["Authorization"] = `Bearer ${token}`;
+    config.headers["Content-Type"] = "application/json";
 
     return config;
   });
