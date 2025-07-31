@@ -22,7 +22,27 @@ export const usePostStore = defineStore("post", {
       const { $axios } = useNuxtApp();
 
       try {
-        return $axios.get(`/post?page=${page}&perPage=${perPage}`);
+        const graphqlQuery = {
+          query: `
+            {
+              getPosts(page: ${page}, perPage: ${perPage}) {
+                  page,
+                  totalPages,
+                  items {
+                    _id
+                    text
+                    userId {
+                      _id
+                      name
+                      email
+                    }
+                  }
+              }
+            }
+          `,
+        };
+
+        return $axios.post("", JSON.stringify(graphqlQuery));
       } catch (error: any) {
         console.log(error);
 
@@ -38,16 +58,43 @@ export const usePostStore = defineStore("post", {
       const { $axios } = useNuxtApp();
 
       try {
-        const formData = getFormData({
-          text: this.post.text,
-          imageUrl: this.post.imageUrl,
-        });
+        const graphqlQuery = {
+          query: `
+            mutation {
+              storePost(postInput: {
+                text: "${this.post.text}",
+                imageUrl: "some url"
+              }) {
+                message
+                item {
+                  _id
+                  text
+                  userId {
+                    _id
+                    name
+                    email
+                  }
+                  imageUrl
+                  createdAt 
+                } 
+              }
+            }
+          `,
+        };
+        // const formData = getFormData({
+        //   text: this.post.text,
+        //   imageUrl: this.post.imageUrl,
+        // });
 
-        return $axios.post("/post", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        return $axios.post(
+          "",
+          JSON.stringify(graphqlQuery)
+          //  {
+          //   headers: {
+          //     "Content-Type": "multipart/form-data",
+          //   },
+          // }
+        );
       } catch (error: any) {
         console.log(error);
 

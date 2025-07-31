@@ -16,7 +16,9 @@ export function usePost() {
     const response = await postStore.storePost();
 
     if (response) {
-      appStore.setSuccessMessage(response.data.data.message);
+      appStore.setSuccessMessage(response.data.data.storePost.message);
+
+      postStore.items = [response.data.data.storePost.item, ...postStore.items];
 
       postStore.clearFields();
 
@@ -56,10 +58,10 @@ export function usePost() {
     infiniteScrollStore.loading = true;
 
     return postStore.fetchPosts(page).then((response: object) => {
-      infiniteScrollStore.page = response.data.data.page;
-      infiniteScrollStore.totalPages = response.data.data.totalPages;
+      infiniteScrollStore.page = response.data.data.getPosts.page;
+      infiniteScrollStore.totalPages = response.data.data.getPosts.totalPages;
 
-      postStore.mergePosts(response.data.data.items);
+      postStore.mergePosts(response.data.data.getPosts.items);
 
       // stop loading new pages
       infiniteScrollStore.loading = false;
@@ -68,8 +70,7 @@ export function usePost() {
     });
   }
 
-  function initActions() {
-  }
+  function initActions() {}
 
   return {
     storePost,
