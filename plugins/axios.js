@@ -19,7 +19,10 @@ export default defineNuxtPlugin((nuxtApp) => {
     const token = getItem("token");
 
     config.headers["Authorization"] = `Bearer ${token}`;
-    config.headers["Content-Type"] = "application/json";
+
+    if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json";
+    }
 
     return config;
   });

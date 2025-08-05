@@ -12,7 +12,6 @@ export const useFileStore = defineStore("file", {
       const { $axios } = useNuxtApp();
 
       try {
-
         const formData = getFormData({
           imageUrl: this.file,
         });

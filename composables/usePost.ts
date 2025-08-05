@@ -16,8 +16,8 @@ export function usePost() {
     event.preventDefault();
 
     const storeFileResponse = await fileStore.storeFile()
-console.log(storeFileResponse)
-    const storePostResponse = await postStore.storePost();
+
+    const storePostResponse = await postStore.storePost(storeFileResponse.data.data.imageUrl);
 
     if (storePostResponse) {
       appStore.setSuccessMessage(storePostResponse.data.data.storePost.message);

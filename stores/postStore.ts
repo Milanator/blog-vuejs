@@ -54,7 +54,7 @@ export const usePostStore = defineStore("post", {
       this.post = {};
     },
 
-    storePost(): void | Promise<AxiosResponse> {
+    storePost(imageUrl: undefined | string): void | Promise<AxiosResponse> {
       const { $axios } = useNuxtApp();
 
       try {
@@ -63,7 +63,7 @@ export const usePostStore = defineStore("post", {
             mutation {
               storePost(postInput: {
                 text: "${this.post.text}",
-                imageUrl: "some url"
+                imageUrl: "${imageUrl}"
               }) {
                 message
                 item {
