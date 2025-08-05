@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { usePostStore } from "~/stores/postStore.ts";
+import { useFileStore } from "~/stores/fileStore.ts";
 import Image from "~/components/post/image.vue";
 
-const postStore = usePostStore();
+const fileStore = useFileStore();
 </script>
 <template>
   <!-- Image -->
-  <Image v-if="postStore.post.imageUrl" :image-url="postStore.post.imageUrl" />
+  <Image v-if="fileStore.file" :image-url="fileStore.file" />
   <div v-else class="flex items-center justify-center w-full px-4 pt-2">
     <label
       for="dropzone-file"
@@ -39,7 +39,7 @@ const postStore = usePostStore();
         id="dropzone-file"
         type="file"
         class="hidden"
-        @change="postStore.post.imageUrl = $event.target.files[0]"
+        @change="fileStore.file = $event.target.files[0]"
       />
     </label>
   </div>

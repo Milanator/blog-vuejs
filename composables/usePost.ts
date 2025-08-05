@@ -1,9 +1,11 @@
 import { useInfiniteScrollStore } from "~/stores/infiniteScrollStore.ts";
 import { usePostStore } from "~/stores/postStore.ts";
+import { useFileStore } from "~/stores/fileStore.ts";
 import { useAppStore } from "~/stores/appStore.ts";
 import { ref } from "vue";
 
 export function usePost() {
+  const fileStore = useFileStore()
   const postStore = usePostStore();
   const appStore = useAppStore();
   const infiniteScrollStore = useInfiniteScrollStore();
@@ -13,12 +15,14 @@ export function usePost() {
   async function storePost(event: Event): void {
     event.preventDefault();
 
-    const response = await postStore.storePost();
+    const storeFileResponse = await fileStore.storeFile()
+console.log(storeFileResponse)
+    const storePostResponse = await postStore.storePost();
 
-    if (response) {
-      appStore.setSuccessMessage(response.data.data.storePost.message);
+    if (storePostResponse) {
+      appStore.setSuccessMessage(storePostResponse.data.data.storePost.message);
 
-      postStore.items = [response.data.data.storePost.item, ...postStore.items];
+      postStore.items = [storePostResponse.data.data.storePost.item, ...postStore.items];
 
       postStore.clearFields();
 
