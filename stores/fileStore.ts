@@ -8,12 +8,13 @@ export const useFileStore = defineStore("file", {
     file: undefined,
   }),
   actions: {
-    storeFile(): void | Promise<AxiosResponse> {
+    storeFile(oldFilePath: string | undefined): void | Promise<AxiosResponse> {
       const { $axios } = useNuxtApp();
 
       try {
         const formData = getFormData({
           imageUrl: this.file,
+          oldFilePath,
         });
 
         return $axios.post(

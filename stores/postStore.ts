@@ -31,6 +31,7 @@ export const usePostStore = defineStore("post", {
                   items {
                     _id
                     text
+                    imageUrl
                     userId {
                       _id
                       name
@@ -81,20 +82,8 @@ export const usePostStore = defineStore("post", {
             }
           `,
         };
-        // const formData = getFormData({
-        //   text: this.post.text,
-        //   imageUrl: this.post.imageUrl,
-        // });
 
-        return $axios.post(
-          "",
-          JSON.stringify(graphqlQuery)
-          //  {
-          //   headers: {
-          //     "Content-Type": "multipart/form-data",
-          //   },
-          // }
-        );
+        return $axios.post("", JSON.stringify(graphqlQuery));
       } catch (error: any) {
         console.log(error);
 
@@ -102,13 +91,34 @@ export const usePostStore = defineStore("post", {
       }
     },
 
-    updatePost(): void | Promise<AxiosResponse> {
+    updatePost(imageUrl: undefined | string): void | Promise<AxiosResponse> {
       const { $axios } = useNuxtApp();
 
       try {
-        return $axios.put(`/post/${this.post._id}`, {
-          text: this.post.text,
-        });
+        const graphqlQuery = {
+          query: `
+            mutation {
+              updatePost(id: "${this.post._id}", postInput: {
+                text: "${this.post.text}",
+                imageUrl: "${imageUrl}"
+              }) {
+                message
+                item {
+                  _id
+                  text
+                  imageUrl
+                  userId {
+                    _id
+                    name
+                    email
+                  }
+                }
+              }
+            }
+          `
+        }
+
+        return $axios.post(``, JSON.stringify(graphqlQuery));
       } catch (error: any) {
         console.log(error);
 
@@ -132,8 +142,25 @@ export const usePostStore = defineStore("post", {
       const { $axios } = useNuxtApp();
 
       try {
-        $axios.get(`/post/${id}`).then((r: object) => {
-          this.post = r.data.data;
+        const graphqlQuery = {
+          query: `{
+            showPost(id: "${id}")
+            {
+              _id
+              text
+              imageUrl
+              createdAt
+              userId {
+                _id
+                name
+                email
+              }
+            }
+          }`,
+        };
+
+        $axios.post(``, JSON.stringify(graphqlQuery)).then((r: object) => {
+          this.post = r.data.data.showPost;
         });
       } catch (error: any) {
         console.log(error);

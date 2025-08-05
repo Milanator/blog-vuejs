@@ -5,7 +5,7 @@ import { useAppStore } from "~/stores/appStore.ts";
 import { ref } from "vue";
 
 export function usePost() {
-  const fileStore = useFileStore()
+  const fileStore = useFileStore();
   const postStore = usePostStore();
   const appStore = useAppStore();
   const infiniteScrollStore = useInfiniteScrollStore();
@@ -15,14 +15,19 @@ export function usePost() {
   async function storePost(event: Event): void {
     event.preventDefault();
 
-    const storeFileResponse = await fileStore.storeFile()
+    const storeFileResponse = await fileStore.storeFile();
 
-    const storePostResponse = await postStore.storePost(storeFileResponse.data.data.imageUrl);
+    const storePostResponse = await postStore.storePost(
+      storeFileResponse.data.data.imageUrl
+    );
 
     if (storePostResponse) {
       appStore.setSuccessMessage(storePostResponse.data.data.storePost.message);
 
-      postStore.items = [storePostResponse.data.data.storePost.item, ...postStore.items];
+      postStore.items = [
+        storePostResponse.data.data.storePost.item,
+        ...postStore.items,
+      ];
 
       postStore.clearFields();
 
@@ -33,10 +38,20 @@ export function usePost() {
   async function updatePost(event: Event): void {
     event.preventDefault();
 
-    const response = await postStore.updatePost();
+    let imageUrl: string | undefined = postStore.post.imageUrl;
 
-    if (response) {
-      appStore.setSuccessMessage(response.data.data.message);
+    if (fileStore.file) {
+      const updateFileResponse = await fileStore.storeFile(imageUrl);
+
+      imageUrl = updateFileResponse.data.data.imageUrl;
+    }
+
+    const updatePostResponse = await postStore.updatePost(imageUrl);
+
+    if (updatePostResponse) {
+      appStore.setSuccessMessage(updatePostResponse.data.data.message);
+
+      postStore.items = [];
 
       // redirect listing
       navigateTo("/post");
