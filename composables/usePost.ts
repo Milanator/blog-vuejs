@@ -49,7 +49,9 @@ export function usePost() {
     const updatePostResponse = await postStore.updatePost(imageUrl);
 
     if (updatePostResponse) {
-      appStore.setSuccessMessage(updatePostResponse.data.data.message);
+      appStore.setSuccessMessage(
+        updatePostResponse.data.data.updatePost.message
+      );
 
       postStore.items = [];
 
@@ -64,7 +66,9 @@ export function usePost() {
 
       if (response) {
         response.then((r: object) => {
-          appStore.setSuccessMessage(r.data.data.message);
+          appStore.setSuccessMessage(r.data.data.deletePost.message);
+
+          postStore.items = postStore.items.filter((item)=> item._id !== id)
 
           // redirect listing
           return navigateTo("/post");

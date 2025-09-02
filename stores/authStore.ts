@@ -14,11 +14,11 @@ export const useAuthStore = defineStore("auth", {
 
         const graphqlQuery: object = {
           query: `
-            mutation {
+            mutation SignUp($name: String!, $email: String!, $password: String!) {
               signUp(userInput: {
-                name: "${this.name}",
-                email: "${this.email}",
-                password: "${this.password}"
+                name: $name,
+                email: $email,
+                password: $password
               }) {
                 _id
                 name
@@ -26,6 +26,11 @@ export const useAuthStore = defineStore("auth", {
               }
             }
           `,
+          variables: {
+            name: this.name,
+            email: this.email,
+            password: this.password,
+          },
         };
 
         return $axios.post("", JSON.stringify(graphqlQuery));
@@ -42,10 +47,10 @@ export const useAuthStore = defineStore("auth", {
 
         const grapqhlQuery: object = {
           query: `
-            mutation {
+            mutation Login($email: String!, $password: String!) {
               login(userInput: {
-                email: "${this.email}",
-                password: "${this.password}"
+                email: $email,
+                password: $password
               }) {
                 user {
                   _id
@@ -58,6 +63,10 @@ export const useAuthStore = defineStore("auth", {
               }
             }
           `,
+          variables: {
+            email: this.email,
+            password: this.password,
+          },
         };
 
         return $axios.post("", JSON.stringify(grapqhlQuery));

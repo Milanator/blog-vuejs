@@ -19,13 +19,14 @@ export const usePostStore = defineStore("post", {
       page: number = 1,
       perPage: number = 1
     ): void | Promise<AxiosResponse> {
-      const { $axios } = useNuxtApp();
-
       try {
+        const { $axios } = useNuxtApp();
+
         const graphqlQuery = {
           query: `
+            query FetchPosts($page: Int, $perPage: Int)
             {
-              getPosts(page: ${page}, perPage: ${perPage}) {
+              getPosts(page: $page, perPage: $perPage) {
                   page,
                   totalPages,
                   items {
@@ -41,6 +42,10 @@ export const usePostStore = defineStore("post", {
               }
             }
           `,
+          variables: {
+            page,
+            perPage,
+          },
         };
 
         return $axios.post("", JSON.stringify(graphqlQuery));
@@ -61,10 +66,11 @@ export const usePostStore = defineStore("post", {
       try {
         const graphqlQuery = {
           query: `
-            mutation {
+            mutation StorePost($text: String!, $imageUrl: String!) 
+            {
               storePost(postInput: {
-                text: "${this.post.text}",
-                imageUrl: "${imageUrl}"
+                text: $text,
+                imageUrl: $imageUrl
               }) {
                 message
                 item {
@@ -81,6 +87,10 @@ export const usePostStore = defineStore("post", {
               }
             }
           `,
+          variables: {
+            text: this.post.text,
+            imageUrl,
+          },
         };
 
         return $axios.post("", JSON.stringify(graphqlQuery));
@@ -97,10 +107,11 @@ export const usePostStore = defineStore("post", {
       try {
         const graphqlQuery = {
           query: `
-            mutation {
-              updatePost(id: "${this.post._id}", postInput: {
-                text: "${this.post.text}",
-                imageUrl: "${imageUrl}"
+            mutation UpdatePost($id: ID!, $text: String!, $imageUrl: String!)
+            {
+              updatePost(id: $id, postInput: {
+                text: $text,
+                imageUrl: $imageUrl
               }) {
                 message
                 item {
@@ -115,8 +126,13 @@ export const usePostStore = defineStore("post", {
                 }
               }
             }
-          `
-        }
+          `,
+          variables: {
+            id: this.post._id,
+            text: this.post.text,
+            imageUrl,
+          },
+        };
 
         return $axios.post(``, JSON.stringify(graphqlQuery));
       } catch (error: any) {
@@ -130,7 +146,20 @@ export const usePostStore = defineStore("post", {
       const { $axios } = useNuxtApp();
 
       try {
-        return $axios.delete(`/post/${id}`);
+        const graphqlQuery = {
+          query: `
+            mutation DeletePost($id: ID!) {
+              deletePost(id: $id) {
+                message
+              }
+            }
+          `,
+          variables: {
+            id,
+          },
+        };
+
+        return $axios.post("", JSON.stringify(graphqlQuery));
       } catch (error: any) {
         console.log(error);
 
@@ -143,20 +172,26 @@ export const usePostStore = defineStore("post", {
 
       try {
         const graphqlQuery = {
-          query: `{
-            showPost(id: "${id}")
+          query: `
+            query ShowPost($id: ID!)
             {
-              _id
-              text
-              imageUrl
-              createdAt
-              userId {
+              showPost(id: $id)
+              {
                 _id
-                name
-                email
+                text
+                imageUrl
+                createdAt
+                userId {
+                  _id
+                  name
+                  email
+                }
               }
             }
-          }`,
+          `,
+           variables: {
+            id,
+          },
         };
 
         $axios.post(``, JSON.stringify(graphqlQuery)).then((r: object) => {
